@@ -20,6 +20,15 @@ vidQuizify/
 └── services/
     └── transcription-service/  # Audio processing and question generation
 ```
+## Demo
+![image](https://github.com/user-attachments/assets/e94fb249-b711-4e0f-8ae3-050f01453906)
+
+![image](https://github.com/user-attachments/assets/98b4cd4f-4ae8-4848-862f-9a7f9ec08aab)
+
+![image](https://github.com/user-attachments/assets/74d3be24-fd64-40bb-9192-4c4f67e9a7a4)
+
+![image](https://github.com/user-attachments/assets/fda95be6-e96e-4765-a8f0-5cb418b984cf)
+
 
 ## 🛠️ Prerequisites
 

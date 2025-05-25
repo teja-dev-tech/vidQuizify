@@ -121,12 +121,12 @@ Example response:
         # Split text into sentences to help with question generation
         sentences = [s.strip() for s in text.split('.') if len(s.strip()) > 10]
         
-        # Create a focused prompt for one question
-        prompt = """Generate exactly 1 high-quality multiple-choice question based on the following text.
+        # Create a focused prompt for question generation
+        prompt = """Generate exactly {num_questions} high-quality multiple-choice questions based on the following text.
 
 RULES:
-1. Create 1 question that tests understanding of a key concept
-2. The question MUST have exactly 4 options (A, B, C, D)
+1. Create {num_questions} questions that tests understanding of a key concept
+2. Each question MUST have exactly 4 options (A, B, C, D)
 3. Only one option should be correct (correctAnswer: 0-3)
 4. Include a clear, concise explanation for the correct answer
 5. The question should be specific and based ONLY on the provided text
@@ -140,8 +140,8 @@ TEXT TO USE:
 {text}
 
 FORMAT REQUIREMENTS:
-- Respond with a JSON array containing exactly 1 question object
-- The object MUST have these exact fields:
+- Respond with a JSON array containing exactly {num_questions} question objects
+- Each object MUST have these exact fields:
   - question: (string) The question text
   - options: (array) Exactly 4 answer choices as strings
   - correctAnswer: (number) Index of correct answer (0-3)
@@ -158,12 +158,12 @@ EXAMPLE RESPONSE:
 ]
 
 IMPORTANT:
-- Generate EXACTLY 1 question
+- Generate EXACTLY {num_questions} questions
 - The question must be directly answerable from the given text
 - Make all options plausible but only one correct
 - The response MUST be valid JSON
 
-Now generate 1 high-quality question based on the text above:"""
+Now generate {num_questions} high-quality questions based on the text above:"""
 
         logger.info("Sending request to Ollama API...")
         logger.debug(f"Using model: {MODEL_NAME}")

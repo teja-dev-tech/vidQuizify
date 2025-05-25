@@ -1,0 +1,68 @@
+version: '3.8'
+
+services:
+  # MongoDB Service
+  mongodb:
+    image: mongo:6.0
+    container_name: vidquizify_mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+      MONGO_INITDB_DATABASE: vidquizify
+    networks:
+      - vidquizify-network
+
+  # Python Transcription Service
+  transcription-service:
+    build:
+      context: ./services/transcription-service
+      dockerfile: Dockerfile
+    container_name: vidquizify_transcription
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./services/transcription-service:/app
+      - ./uploads:/app/uploads
+    environment:
+      - PORT=8000
+      - HOST=0.0.0.0
+      - WHISPER_MODEL=base
+    networks:
+      - vidquizify-network
+    depends_on:
+      - mongodb
+
+  # NestJS Backend
+  backend:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: vidquizify_backend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./server:/app
+      - ./uploads:/app/uploads
+    environment:
+      - NODE_ENV=development
+      - PORT=3000
+      - MONGODB_URI=mongodb://root:example@mongodb:27017/vidquizify?authSource=admin
+      - UPLOAD_PATH=./uploads
+      - MAX_FILE_SIZE=1073741824
+      - TRANSCRIPTION_SERVICE_URL=http://transcription-service:8000
+    networks:
+      - vidquizify-network
+    depends_on:
+      - mongodb
+      - transcription-service
+
+volumes:
+  mongodb_data:
+
+networks:
+  vidquizify-network:
+    driver: bridge

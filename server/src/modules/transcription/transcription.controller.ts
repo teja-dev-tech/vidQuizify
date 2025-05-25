@@ -36,15 +36,6 @@ export class TranscriptionController {
     return { status: 'success', data: { segments } };
   }
 
-  @Post('questions/:videoId')
-  @ApiOperation({ summary: 'Generate questions for a video' })
-  async generateQuestions(
-    @Param('videoId') videoId: string,
-  ) {
-    await this.service.generateQuestionsForVideo(videoId);
-    return { status: 'success', message: 'Question generation started' };
-  }
-
   @Get('questions/:videoId')
   @ApiOperation({ summary: 'Get questions for a video' })
   async getQuestions(@Param('videoId') videoId: string) {
